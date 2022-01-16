@@ -1,4 +1,4 @@
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Alert } from '@mui/material';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,7 +14,7 @@ function MemoPane() {
   }, []);
 
   if (memos.length == 0) {
-    return <Box>작성한 메모가 존재하지 않습니다</Box>;
+    return <Alert severity='info'>작성한 메모가 존재하지 않습니다</Alert>;
   }
   return (
     <Stack spacing={2}>
