@@ -15,6 +15,7 @@ import markdown from 'markdown-it';
 import 'github-markdown-css';
 import { useDispatch } from 'react-redux';
 import { EDITOR_TOGGLE } from '../store/option';
+import { addMemo } from '../store/memo';
 
 const opts = {
   html: true,
@@ -45,15 +46,29 @@ function EditorPane() {
   };
 
   const onKeyDown = e => {
+    const text = e.target.value;
+
     if (e.keyCode == 13) {
-      if (e.target.value.trim() != '') {
-        const value = e.target.value;
-        setTags(state => [...state, value]);
+      if (text != '' && !tags.includes(text)) {
+        setTags(state => [...state, text]);
         e.target.value = '';
       }
-    } else if (e.keyCode == 8 && tags.length > 0) {
-      setTags(state => state.filter(i => i !== state.pop()));
+    } else if (e.keyCode == 8) {
+      if (!text && tags.length > 0) {
+        const last = tags.pop();
+        setTags(state => state.filter(i => i !== last));
+      }
     }
+  };
+
+  const saveToServer = () => {
+    const payload = {
+      sub: text.split(/\s/)[0],
+      body: text,
+      tags: tags,
+    };
+
+    dispatch(addMemo(payload));
   };
 
   useEffect(() => {
@@ -81,7 +96,7 @@ function EditorPane() {
             fullWidth
             multiline
             value={text}
-            sx={{ rows: 20 }}
+            minRows={10}
             onChange={e => setText(e.target.value)}
           />
         </Box>
@@ -106,8 +121,10 @@ function EditorPane() {
       </TabPanel>
 
       <TabPanel value={index} index={1} style={{ padding: 4 }}>
-        <Box className='markdown-body' dangerouslySetInnerHTML={markup()}></Box>
+        <Box className='markdown-body' dangerouslySetInnerHTML={markup()} />
       </TabPanel>
+
+      {index == 0 && <Button onClick={saveToServer}>Save</Button>}
     </>
   );
 }
