@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 
-import MemoPane from '../components/MemoPane';
+import PostPane from '../components/PostPane';
 import SidePane from '../components/SidePane';
 import EditorPane from '../components/EditorPane';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ function Home() {
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} md={8}>
-        {!showEditor && <MemoPane />}
+        {!showEditor && <PostPane />}
         {showEditor && <EditorPane />}
       </Grid>
 

@@ -1,19 +1,24 @@
 import { StaticDatePicker } from '@mui/lab';
 import { useSelector, useDispatch } from 'react-redux';
-import { Tabs, Tab, Box, Chip, TextField, Card } from '@mui/material';
+import { Tabs, Tab, TextField, Card } from '@mui/material';
 import { useState, useEffect } from 'react';
-import { TAG_FETCHED } from '../store/tag';
+import { fetchTags } from '../store/tag';
 
 import TabPane from './TabPane';
+import TagList from './TagList';
+import Loading from './Loading';
 
 function SidePane() {
   const dispatch = useDispatch();
   const tags = useSelector(state => state.tags);
   const [index, setIndex] = useState(0);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    dispatch({ type: TAG_FETCHED });
-  });
+    setShow(true);
+    dispatch(fetchTags());
+    setTimeout(() => setShow(false), 600);
+  }, [index]);
 
   return (
     <Card variant='outlined'>
@@ -23,14 +28,8 @@ function SidePane() {
       </Tabs>
 
       <TabPane value={index} index={0} sx={{ p: 0 }} style={{ minHeight: 100 }}>
-        {tags.map(tag => (
-          <Chip
-            size='small'
-            label={`${tag.name}(${tag.count})`}
-            style={{ margin: '2px 3px' }}
-            key={tag.name}
-          />
-        ))}
+        <Loading show={show} />
+        {!show && <TagList tags={tags} />}
       </TabPane>
 
       <TabPane value={index} index={1}>

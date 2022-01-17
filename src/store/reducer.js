@@ -4,13 +4,13 @@ import storage from 'redux-persist/lib/storage/session';
 
 import userReducer from './user';
 import tagReducer from './tag';
-import memoReducer from './memo';
+import postReducer from './post';
 import optionReducer from './option';
 
 const rootReducer = combineReducers({
   user: userReducer,
   tags: tagReducer,
-  memos: memoReducer,
+  posts: postReducer,
   option: optionReducer,
 });
 
