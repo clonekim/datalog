@@ -25,14 +25,15 @@ function TagChipInputText({ tags, setTags }) {
     <TextField
       fullWidth
       onKeyDown={onKeyDown}
+      focused={false}
       InputProps={{
         startAdornment: (
-          <InputAdornment position='start'>
+          <InputAdornment position="start">
             {tags.map(tag => (
               <Chip
                 key={tag}
                 label={`${tag}`}
-                size='small'
+                size="small"
                 onDelete={() => deleteTag(tag)}
               />
             ))}

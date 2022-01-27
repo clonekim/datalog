@@ -9,8 +9,13 @@ export const TAG_DELETED = 'tag/deleted';
 
 export function fetchTags() {
   return async function fetchTags(dispatch, getState) {
-    const payload = await fetch();
-    dispatch({ type: TAG_FETCHED, payload });
+    try {
+      const payload = await fetch();
+      dispatch({ type: TAG_FETCHED, payload });
+    } catch (err) {
+      console.log(111111111111111);
+      dispatch({ type: 'error/fired', payload: err });
+    }
   };
 }
 

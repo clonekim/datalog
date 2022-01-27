@@ -1,16 +1,20 @@
-import { Chip } from '@mui/material';
+import { Chip, Paper } from '@mui/material';
 
-function TagList({ tags }) {
+function TagList({ tags = [] }) {
+  console.log(tags);
+
   return (
     <>
-      {tags.map(tag => (
-        <Chip
-          size='small'
-          label={tag.count ? `${tag.name}(${tag.count})` : tag.name}
-          style={{ margin: '2px 3px' }}
-          key={tag.name}
-        />
-      ))}
+      <Paper sx={{ p: 2, height: 300 }}>
+        {tags.map(tag => (
+          <Chip
+            size="small"
+            label={tag.count ? `${tag.name}(${tag.count})` : tag.name}
+            style={{ margin: '2px 3px' }}
+            key={tag.name}
+          />
+        ))}
+      </Paper>
     </>
   );
 }

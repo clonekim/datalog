@@ -51,7 +51,7 @@
       "port": 8080
     },
     "database": {
-      "port": 9090
+      "port": 9000
     },
     "hosting": {
       "port": 5000

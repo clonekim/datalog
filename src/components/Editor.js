@@ -6,8 +6,8 @@ import TagChipInputText from './TagChipInputText';
 
 import markdown from 'markdown-it';
 import { useDispatch } from 'react-redux';
-import { EDITOR_TOGGLE } from '../store/option';
-import { addPost } from '../store/post';
+import { EDITOR_TOGGLE } from '../store/actionType';
+import { addPost } from '../store/postReducer';
 
 import 'github-markdown-css';
 
@@ -53,17 +53,15 @@ function EditorPane() {
   }, [index]);
 
   return (
-    <>
-      <Grid container justifyContent='space-between'>
-        <Tabs value={index} onChange={(_, value) => setIndex(value)}>
-          <Tab label='Source' />
-          <Tab label='Preview' />
-        </Tabs>
+    <Box sx={{ width: 550 }}>
+      <Tabs value={index} onChange={(_, value) => setIndex(value)}>
+        <Tab label="Source" />
+        <Tab label="Preview" />
+      </Tabs>
 
-        <Button size='small' onClick={closeEditor}>
-          <CloseIcon />
-        </Button>
-      </Grid>
+      <Button size="small" onClick={closeEditor}>
+        <CloseIcon />
+      </Button>
 
       <TabPanel value={index} index={0} style={{ padding: 4 }}>
         <Box style={{ paddingBottom: 5 }}>
@@ -73,18 +71,23 @@ function EditorPane() {
             value={text}
             minRows={8}
             maxRows={30}
+            focused={false}
             onChange={e => setText(e.target.value)}
           />
         </Box>
         <TagChipInputText tags={tags} setTags={setTags} />
       </TabPanel>
 
-      <TabPanel value={index} index={1} style={{ padding: 4 }}>
-        <Box className='markdown-body' dangerouslySetInnerHTML={markup()} />
+      <TabPanel value={index} index={1} style={{ padding: 4, minHeight: 300 }}>
+        <Box className="markdown-body" dangerouslySetInnerHTML={markup()} />
       </TabPanel>
 
-      {index == 0 && <Button onClick={saveToServer}>Save</Button>}
-    </>
+      {index == 0 && (
+        <Button fullWidth variant="contained" onClick={saveToServer}>
+          Save
+        </Button>
+      )}
+    </Box>
   );
 }
 

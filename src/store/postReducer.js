@@ -1,22 +1,20 @@
 import { create, fetch } from '../api/post';
-
-export const POST_ADDED = 'post/added';
-export const POST_FETCHED = 'post/fetched';
+import { POST_ADDED, POST_FETCHED } from './actionType';
 
 const initialState = [];
 
 export function addPost(payload) {
-  return async function addPost(dispatch, getState) {
+  return async (dispatch, getState) => {
     const response = await create(payload);
     console.log('Response =>', response);
-    return await dispatch({ type: POST_ADDED, payload });
+    dispatch({ type: POST_ADDED, payload });
   };
 }
 
 export function fetchPost() {
-  return async function fetchPost(dispatch, getState) {
+  return async (dispatch, getState) => {
     const response = await fetch();
-    return await dispatch({ type: POST_FETCHED, payload: response });
+    dispatch({ type: POST_FETCHED, payload: response });
   };
 }
 
