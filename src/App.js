@@ -12,12 +12,17 @@ function App() {
           background: {
             default: mode === 'dark' ? '#121212' : '#e4e6eb',
           },
-          primary: {
-            main: '#FFFFFF',
-          },
+
           mode,
         },
         components: {
+          MuiTab: {
+            styleOverrides: {
+              root: {
+                textTransform: 'none'
+              }
+            }
+          },
           MuiButton: {
             styleOverrides: {
               root: {

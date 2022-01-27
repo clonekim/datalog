@@ -1,17 +1,20 @@
 const functions = require('firebase-functions');
-const logger = functions.logger;
 const admin = require('firebase-admin');
+const _ = require('lodash');
+admin.initializeApp();
 
 const express = require('express');
 const cors = require('cors');
-const app = express();
 const markdown = require('markdown-it');
+const { firebaseConfig } = require('firebase-functions');
+const app = express();
 
 const md = markdown({
   html: true,
 });
 
-admin.initializeApp();
+const logger = functions.logger;
+const firestore = admin.firestore();
 
 exports.saveAuthentication = functions.auth.user().onCreate(async user => {
   logger.debug('User logged in ->', user);
@@ -20,12 +23,11 @@ exports.saveAuthentication = functions.auth.user().onCreate(async user => {
     disabled: true,
   });
 
-  return await admin
-    .firestore()
-    .collection('users')
+  return await firestore
+    .collection('profiles')
     .doc(user.uid)
     .create({
-      displayName: user.displayName || 'No name',
+      displayName: user.displayName || 'Unknown',
       email: user.email,
       emailVerified: user.emailVerified,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -37,34 +39,51 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 app.post('/addPost', async (req, res) => {
-  const data = req.body.data;
-  data.createdAt = admin.firestore.FieldValue.serverTimestamp();
-  data.updatedAt = admin.firestore.FieldValue.serverTimestamp();
-  data.isDraft = true;
+  const { sub, body, tags, authId } = req.body.data;
+  const data = {
+    sub,
+    body,
+    tags,
+    author: {
+      ref: `profiles/${authId}`,
+    },
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    isDraft: true,
+  };
 
-  await admin.firestore().runTransaction(async transaction => {
-    const { tags = [] } = data;
+  tags.forEach(async tag => {
+    const tagSnapShot = firestore.doc(`tags/${tag}`);
+    tagSnapShot.set({ count: admin.firestore.FieldValue.increment(1) });
+  });
 
-    tags.forEach(async val => {
-      const tagRef = admin.firestore().doc(`tags/${val}`);
-      const tagSnapShot = await transaction.get(tagRef);
+  const writeResult = await firestore.collection('posts').add(data);
 
-      const count = tagSnapShot.get('count') || 0;
-      transaction.set(tagRef, { count: count + 1 });
-    });
-
-    const writeResult = await admin.firestore().collection('posts').add(data);
-    res.json({ id: writeResult.id });
+  res.json({
+    ...data,
+    id: writeResult.id,
+    body: md.render(body),
   });
 });
 
 app.post('/fetchPosts', async (req, res) => {
-  const posts = await admin.firestore().collection('posts').get();
+  const posts = await firestore.collection('posts').get();
 
-  const data = posts.docs.map(doc => {
-    const _doc = doc.data();
-    return Object.assign(_doc, { body: md.render(_doc.body) });
-  });
+  const data = await Promise.all(
+    posts.docs.map(async doc => {
+      const profile = await firestore.doc(doc.get('author.ref')).get();
+      const _doc = doc.data();
+      return Object.assign(_doc, {
+        id: doc.id,
+        author: profile.get('displayName'),
+        body: md.render(_doc.body),
+        createdAt: _doc.createdAt.toDate(),
+        updaatedAt: _doc.updatedAt.toDate(),
+      });
+    }),
+  );
+
+  console.log(data);
 
   res.json({ data });
 });

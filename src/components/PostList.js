@@ -14,7 +14,7 @@ export default function PostList() {
   return (
     <>
       {posts.map(post => (
-        <Post post={post} key={post.id} />
+        <Post {...post} key={post.id} />
       ))}
     </>
   );

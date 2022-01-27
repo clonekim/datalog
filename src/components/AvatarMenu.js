@@ -15,6 +15,8 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { THEME_TOGGLE } from '../store/actionType';
+import { userLogout } from '../store/userReducer';
+
 
 export default function AvatarMenu({ initials }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -33,6 +35,10 @@ export default function AvatarMenu({ initials }) {
     dispatch({ type: THEME_TOGGLE, payload: isDark ? 'light' : 'dark' });
     handleClose();
   };
+
+  const logout = () => {
+    userLogout(dispatch);
+  }
 
   return (
     <>
@@ -75,7 +81,7 @@ export default function AvatarMenu({ initials }) {
           <ListItemText secondary="My Profile" />
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logout} >
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>

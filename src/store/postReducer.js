@@ -6,7 +6,8 @@ const initialState = [];
 export function addPost(payload) {
   return async (dispatch, getState) => {
     const response = await create(payload);
-    console.log('Response =>', response);
+    console.log('Response =>', response.id);
+
     dispatch({ type: POST_ADDED, payload });
   };
 }

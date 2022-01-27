@@ -1,5 +1,5 @@
-import { watchUser } from '../api/user';
-import { USER_INVALID, USER_LOGIN } from './actionType';
+import { watchUser, signOut } from '../api/user';
+import { USER_INVALID, USER_LOGIN, USER_LOGOUT } from './actionType';
 
 const initialState = {
   username: null,
@@ -14,6 +14,13 @@ export default function userReduder(state = initialState, action) {
         ...state,
         ...action.payload,
         isLogin: true,
+      };
+
+    case USER_LOGOUT:
+      return {
+        username: null,
+        uid: null,
+        isLogin: false,
       };
 
     case USER_INVALID:
@@ -33,3 +40,8 @@ export const userLogined = dispatch => {
     .then(user => dispatch({ type: USER_LOGIN, payload: user }))
     .catch(err => dispatch({ type: USER_INVALID }));
 };
+
+export const userLogout = dispatch => {
+  signOut()
+    .then(() => dispatch({ type: USER_LOGOUT }))
+}

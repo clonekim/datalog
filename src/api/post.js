@@ -1,5 +1,9 @@
+import db from './firebase.firestore';
+import auth from './firebase.auth';
+
 import functions from './firebase.function';
 import { httpsCallable } from 'firebase/functions';
+import { addDoc, collection, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 
 const addPost = httpsCallable(functions, 'handler/addPost');
 const fetchPosts = httpsCallable(functions, 'handler/fetchPosts');
@@ -16,13 +20,23 @@ export const fetch = async () => {
 };
 
 export const create = async payload => {
-  try {
-    const result = await addPost(payload);
 
-    console.log('>> ', result);
-    return result;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
+
+  const writeResult = await addDoc(collection(db, 'posts'), Object.assign(payload, {
+    author: {
+      ref: `profiles/${auth.currentUser.uid}`
+    },
+    isDraft: true,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }));
+
+  payload.tags.map(async tag => {
+    const ref = doc(db, `tags/${tag}`);
+    const snapshot = await getDoc(ref);
+    const count = snapshot.exists() ? snapshot.data().count + 1 : 1;
+    setDoc(ref, { count });
+  })
+
+  return writeResult;
 };

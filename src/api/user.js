@@ -10,6 +10,10 @@ export const googleLogin = async () => {
   return signInWithRedirect(auth, provider);
 };
 
+export const signOut = () => {
+  return auth.signOut();
+}
+
 export const watchUser = () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, user => {
