@@ -1,17 +1,17 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const _ = require('lodash');
-admin.initializeApp();
 
 const express = require('express');
 const cors = require('cors');
 const markdown = require('markdown-it');
-const { firebaseConfig } = require('firebase-functions');
 const app = express();
 
 const md = markdown({
   html: true,
 });
+
+admin.initializeApp();
 
 const logger = functions.logger;
 const firestore = admin.firestore();
@@ -78,12 +78,10 @@ app.post('/fetchPosts', async (req, res) => {
         author: profile.get('displayName'),
         body: md.render(_doc.body),
         createdAt: _doc.createdAt.toDate(),
-        updaatedAt: _doc.updatedAt.toDate(),
+        updatedAt: _doc.updatedAt.toDate(),
       });
     }),
   );
-
-  console.log(data);
 
   res.json({ data });
 });
