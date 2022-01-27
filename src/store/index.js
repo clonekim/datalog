@@ -1,17 +1,12 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 import rootReducer from './rootReducer';
-
-const loggerMiddleware = storeAPI => next => action => {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', storeAPI.getState());
-  return result;
-};
+const logger = createLogger();
 
 const store = createStore(
   rootReducer,
-  applyMiddleware(loggerMiddleware, thunkMiddleware),
+  applyMiddleware(logger, thunkMiddleware),
 );
 
 export default store;
