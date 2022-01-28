@@ -15,12 +15,14 @@ admin.initializeApp();
 
 const logger = functions.logger;
 const firestore = admin.firestore();
+const auth = admin.auth();
 
 exports.saveAuthentication = functions.auth.user().onCreate(async user => {
   logger.debug('User logged in ->', user);
 
-  await admin.auth().setCustomUserClaims(user.uid, {
+  await auth.setCustomUserClaims(user.uid, {
     disabled: true,
+    admin: true,
   });
 
   return await firestore
