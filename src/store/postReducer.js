@@ -5,37 +5,55 @@ import {
   POST_FETCHED,
   SOURCE_SELECTED,
   POST_DELETED,
+  ERROR_FIRED,
 } from './actionType';
 
 const initialState = {
   list: [],
   source: null,
 };
+
 export function addPost(payload) {
   return async dispatch => {
-    const response = await create(payload);
-    dispatch({ type: POST_ADDED, payload: response });
+    try {
+      const response = await create(payload);
+      dispatch({ type: POST_ADDED, payload: response });
+    } catch (err) {
+      dispatch({ type: ERROR_FIRED, payload: err });
+    }
   };
 }
 
 export function updatePost(payload) {
   return async dispatch => {
-    const response = await update(payload);
-    dispatch({ type: POST_UPDATED, payload: response });
+    try {
+      const response = await update(payload);
+      dispatch({ type: POST_UPDATED, payload: response });
+    } catch (err) {
+      dispatch({ type: ERROR_FIRED, payload: err });
+    }
   };
 }
 
 export function deletePost(payload) {
   return async dispatch => {
-    const response = await remove(payload);
-    dispatch({ type: POST_DELETED, payload });
+    try {
+      await remove(payload);
+      dispatch({ type: POST_DELETED, payload });
+    } catch (err) {
+      dispatch({ type: ERROR_FIRED, payload: err });
+    }
   };
 }
 
 export function fetchPosts() {
-  return async (dispatch, getState) => {
-    const response = await fetch();
-    dispatch({ type: POST_FETCHED, payload: response });
+  return async dispatch => {
+    try {
+      const response = await fetch();
+      dispatch({ type: POST_FETCHED, payload: response });
+    } catch (err) {
+      dispatch({ type: ERROR_FIRED, payload: err });
+    }
   };
 }
 

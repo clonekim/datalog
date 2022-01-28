@@ -33,7 +33,7 @@ export const fetch = async () => {
 export const create = async payload => {
   const data = Object.assign(payload, {
     author: {
-      ref: `profiles/${auth.currentUser.uid}`,
+      ref: `users/${auth.currentUser.uid}`,
     },
     isDraft: true,
     createdAt: Timestamp.fromDate(new Date()),

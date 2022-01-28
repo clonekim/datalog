@@ -21,12 +21,11 @@ exports.saveAuthentication = functions.auth.user().onCreate(async user => {
   logger.debug('User logged in ->', user);
 
   await auth.setCustomUserClaims(user.uid, {
-    disabled: true,
-    admin: true,
+    admin: false,
   });
 
   return await firestore
-    .collection('profiles')
+    .collection('users')
     .doc(user.uid)
     .create({
       displayName: user.displayName || 'Unknown',
@@ -47,7 +46,7 @@ app.post('/addPost', async (req, res) => {
     body,
     tags,
     author: {
-      ref: `profiles/${authId}`,
+      ref: `users/${authId}`,
     },
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -74,11 +73,11 @@ app.post('/fetchPosts', async (req, res) => {
 
   const data = await Promise.all(
     posts.docs.map(async doc => {
-      const profile = await firestore.doc(doc.get('author.ref')).get();
+      const user = await firestore.doc(doc.get('author.ref')).get();
       const _doc = doc.data();
       return Object.assign(_doc, {
         id: doc.id,
-        author: profile.get('displayName'),
+        author: user.get('displayName'),
         body: md.render(_doc.body),
         createdAt: _doc.createdAt.toDate(),
         updatedAt: _doc.updatedAt.toDate(),

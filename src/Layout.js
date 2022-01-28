@@ -17,7 +17,7 @@ export default function Layout() {
     return (
       <>
         <Error />
-        <Home />{' '}
+        <Home />
       </>
     );
 
