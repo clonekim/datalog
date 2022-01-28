@@ -97,11 +97,9 @@ export const update = async payload => {
     body: payload.body,
     tags: payload.tags,
     updatedAt: Timestamp.fromDate(new Date()),
-  }
+  };
 
-  const writeResult = await updateDoc(docRef, data);
-
-  console.log('Update ->', writeResult);
+  await updateDoc(docRef, data);
 
   return {
     ...origin,
@@ -109,8 +107,8 @@ export const update = async payload => {
     author: auth.currentUser.displayName,
     body: md.render(payload.body),
     tags: payload.tags,
-    updatedAt: data.updatedAt.toDate()
-  }
+    updatedAt: data.updatedAt.toDate(),
+  };
 };
 
 export const remove = async id => {
@@ -131,9 +129,6 @@ export const remove = async id => {
   await deleteDoc(docRef);
   return true;
 };
-
-
-
 
 const unsub = onSnapshot(doc(db, 'posts', '*'), doc => {
   console.log('Watch Posts =>>>', doc);

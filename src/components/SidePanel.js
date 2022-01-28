@@ -1,19 +1,13 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Card } from '@mui/material';
-import { fetchTags } from '../store/tagReducer';
+import { useSelector } from 'react-redux';
+import { Paper } from '@mui/material';
 import TagList from './TagList';
 
 function SidePanel() {
   const tags = useSelector(state => state.tags);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchTags());
-  }, []);
   return (
-    <Card variant='outlined'>
+    <Paper variant='outlined' sx={{ minHeight: 300, p: 1, mt: 2 }}>
       <TagList tags={tags} />
-    </Card>
+    </Paper>
   );
 }
 

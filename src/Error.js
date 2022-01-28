@@ -7,7 +7,7 @@ function Error() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (error) setShow(true);
+    if (error.hasError) setShow(true);
 
     return () => setShow(false);
   }, [error]);

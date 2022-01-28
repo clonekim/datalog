@@ -18,3 +18,4 @@ export const TAG_UPDATED = 'tag/updated';
 export const TAG_DELETED = 'tag/deleted';
 
 export const ERROR_FIRED = 'error/fired';
+export const ERROR_NONE = 'error/none';

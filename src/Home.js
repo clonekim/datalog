@@ -55,9 +55,11 @@ export default function Home() {
             <PostList />
           </Grid>
 
-          <Grid item md={4} sm={12} xs={12}>
-            <SidePanel />
-          </Grid>
+          {!mobile && (
+            <Grid item md={4} sm={12} xs={12}>
+              <SidePanel />
+            </Grid>
+          )}
         </Grid>
 
         {!showEditor && (

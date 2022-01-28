@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../store/postReducer';
+import { fetchTags } from '../store/tagReducer';
 import Post from './Post';
 
 export default function PostList() {
@@ -10,6 +11,10 @@ export default function PostList() {
   useEffect(() => {
     dispatch(fetchPosts());
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchTags());
+  }, [posts]);
 
   return (
     <>

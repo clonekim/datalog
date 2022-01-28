@@ -97,7 +97,7 @@ function Post({ id, isDraft, tags, updatedAt, body, author }) {
           />
         </CardContent>
         <CardActions>
-          <TagList tags={tags} />
+          <TagList tags={tags.map(t => ({ name: t }))} />
         </CardActions>
       </Card>
     </Box>

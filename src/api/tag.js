@@ -6,11 +6,12 @@ import {
   getDocs,
   doc,
   query,
+  where,
   onSnapshot,
 } from 'firebase/firestore';
 
 export const fetch = async () => {
-  const q = query(collection(db, 'tags').where('count', '>', 0));
+  const q = query(collection(db, 'tags'), where('count', '>', 0));
   const resp = await getDocs(q);
   const payload = [];
   resp.forEach(doc =>
