@@ -1,19 +1,16 @@
 import { fetch } from '../api/tag';
+import { ERROR_FIRED, TAG_FETCHED } from './actionType';
 
 const initialState = [];
 
-export const TAG_FETCHED = 'tag/fetched';
-export const TAG_ADDED = 'tag/added';
-export const TAG_UPDATED = 'tag/updated';
-export const TAG_DELETED = 'tag/deleted';
-
 export function fetchTags() {
-  return async function fetchTags(dispatch, getState) {
+  return async dispatch => {
     try {
       const payload = await fetch();
+
       dispatch({ type: TAG_FETCHED, payload });
     } catch (err) {
-      dispatch({ type: 'error/fired', payload: err });
+      dispatch({ type: ERROR_FIRED, payload: err });
     }
   };
 }

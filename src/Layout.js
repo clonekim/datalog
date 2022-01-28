@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { userLogined } from './store/userReducer';
 import Home from './Home';
+import Error from './Error';
 import Login from './Login';
 
 export default function Layout() {
@@ -12,7 +13,13 @@ export default function Layout() {
     userLogined(dispatch);
   }, []);
 
-  if (isLogin) return <Home />;
+  if (isLogin)
+    return (
+      <>
+        <Error />
+        <Home />{' '}
+      </>
+    );
 
   return <Login />;
 }

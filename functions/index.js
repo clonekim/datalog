@@ -67,6 +67,7 @@ app.post('/addPost', async (req, res) => {
 });
 
 app.post('/fetchPosts', async (req, res) => {
+  logger.debug('fetch posts');
   const posts = await firestore.collection('posts').get();
 
   const data = await Promise.all(

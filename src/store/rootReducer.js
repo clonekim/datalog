@@ -11,7 +11,7 @@ import errorReducer from './errorReducer';
 const rootReducer = combineReducers({
   user: userReducer,
   tags: tagReducer,
-  posts: postReducer,
+  post: postReducer,
   option: optionReducer,
   error: errorReducer,
 });

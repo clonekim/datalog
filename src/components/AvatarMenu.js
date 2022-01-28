@@ -17,8 +17,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { THEME_TOGGLE } from '../store/actionType';
 import { userLogout } from '../store/userReducer';
 
-
-export default function AvatarMenu({ initials }) {
+export default function AvatarMenu({ username, initials }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const isDark = useSelector(state => state.option.theme === 'dark');
@@ -38,16 +37,16 @@ export default function AvatarMenu({ initials }) {
 
   const logout = () => {
     userLogout(dispatch);
-  }
+  };
 
   return (
     <>
       <IconButton
-        edge="start"
-        color="inherit"
-        id="basic-button"
+        edge='start'
+        color='inherit'
+        id='basic-button'
         aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
+        aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}>
         <Avatar>{initials}</Avatar>
@@ -55,15 +54,15 @@ export default function AvatarMenu({ initials }) {
 
       <Menu
         sx={{ width: 200 }}
-        id="basic-menu"
+        id='basic-menu'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}>
-        <MenuItem component="span">
-          <ListItemText>Welcome Kim</ListItemText>
+        <MenuItem component='span'>
+          <ListItemText>Welcome {username} </ListItemText>
         </MenuItem>
 
         <MenuItem onClick={toggleTheme}>
@@ -78,14 +77,14 @@ export default function AvatarMenu({ initials }) {
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
-          <ListItemText secondary="My Profile" />
+          <ListItemText secondary='My Profile' />
         </MenuItem>
         <Divider />
-        <MenuItem onClick={logout} >
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText secondary="Logout" />
+          <ListItemText secondary='Logout' />
         </MenuItem>
       </Menu>
     </>

@@ -12,17 +12,17 @@ function Navigation() {
 
   return (
     <>
-      <AppBar position="static" color="primary">
+      <AppBar position='static' color='primary'>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>
             <Button
-              color="inherit"
-              size="large"
+              color='inherit'
+              size='large'
               startIcon={<ConnectedTvIcon />}>
               Connected
             </Button>
           </Box>
-          <AvatarMenu initials={user.initials} />
+          <AvatarMenu initials={user.initials} username={user.username} />
         </Toolbar>
       </AppBar>
     </>

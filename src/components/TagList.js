@@ -1,13 +1,15 @@
 import { Chip, Paper } from '@mui/material';
 
 function TagList({ tags = [] }) {
+  if (tags.length === 0) return null;
 
-  if (tags.length === 0)
-    return null;
+  const _tags = tags.map(v =>
+    v.count ? { name: v, cout: v.count } : { name: v },
+  );
 
   return (
     <>
-      {tags.map(tag => (
+      {_tags.map(tag => (
         <Chip
           size='small'
           label={tag.count ? `${tag.name}(${tag.count})` : tag.name}
@@ -15,7 +17,6 @@ function TagList({ tags = [] }) {
           key={tag.name}
         />
       ))}
-
     </>
   );
 }

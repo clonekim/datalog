@@ -1,13 +1,19 @@
-import { create, fetch } from '../api/post';
+import { ERROR_FIRED } from './actionType';
 
-export const ERROR_FIRED = 'error/fired';
-
-const initialState = {};
+const initialState = {
+  message: null,
+  stack: null,
+};
 
 export default function errorReduder(state = initialState, action) {
   switch (action.type) {
     case ERROR_FIRED:
-      return action.payload;
+      const { message, stack } = action.payload;
+
+      return {
+        message: message || action.payload,
+        stack,
+      };
 
     default:
       return state;
