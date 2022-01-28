@@ -1,8 +1,6 @@
 import { Chip } from '@mui/material';
 
 function TagList({ tags = [] }) {
-  if (tags.length === 0) return null;
-
   return (
     <>
       {tags.map(tag => (

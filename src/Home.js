@@ -15,6 +15,7 @@ import Navigation from './components/Navigation';
 import PostList from './components/PostList';
 import Editor from './components/Editor';
 import SidePanel from './components/SidePanel';
+import Bonjour from './components/Bonjour';
 
 import { EDITOR_TOGGLE } from './store/actionType';
 
@@ -41,6 +42,7 @@ export default function Home() {
   const mobile = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
   const showEditor = useSelector(state => state.option.showEditor);
+  const posts = useSelector(state => state.post.list);
 
   const toggleEditor = () => {
     dispatch({ type: EDITOR_TOGGLE, payload: true });
@@ -50,6 +52,8 @@ export default function Home() {
     <>
       <Navigation />
       <Container sx={{ mt: 3 }} maxWidth='md'>
+        <Bonjour show={posts.length === 0} />
+
         <Grid container spacing={1}>
           <Grid item md={8} sm={12} xs={12}>
             <PostList />
