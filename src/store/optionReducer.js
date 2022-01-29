@@ -23,3 +23,11 @@ export default function optionReduder(state = initialState, action) {
       return state;
   }
 }
+
+export function editorToggle(payload) {
+  return dispatch => dispatch({ type: EDITOR_TOGGLE, payload });
+}
+
+export function themeToggle(payload) {
+  return dispatch => dispatch({ type: THEME_TOGGLE, payload });
+}

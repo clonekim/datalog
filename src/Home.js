@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  Box,
   Card,
   CardContent,
   Container,
@@ -15,9 +16,8 @@ import Navigation from './components/Navigation';
 import PostList from './components/PostList';
 import Editor from './components/Editor';
 import SidePanel from './components/SidePanel';
-import Bonjour from './components/Bonjour';
-
-import { EDITOR_TOGGLE } from './store/actionType';
+import Greeting from './components/Greeting';
+import { editorToggle } from './store/optionReducer';
 
 const ShowEditor = ({ mobile }) => {
   if (mobile)
@@ -45,14 +45,14 @@ export default function Home() {
   const posts = useSelector(state => state.post.list);
 
   const toggleEditor = () => {
-    dispatch({ type: EDITOR_TOGGLE, payload: true });
+    dispatch(editorToggle(true));
   };
 
   return (
     <>
       <Navigation />
       <Container sx={{ mt: 3 }} maxWidth='md'>
-        <Bonjour show={posts.length === 0} />
+        <Greeting show={posts.length === 0} />
 
         <Grid container spacing={1}>
           <Grid item md={8} sm={12} xs={12}>
@@ -77,6 +77,7 @@ export default function Home() {
 
         {showEditor && <ShowEditor mobile={mobile} />}
       </Container>
+      <Box sx={{ p: 2 }}></Box>
     </>
   );
 }

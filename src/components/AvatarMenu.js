@@ -14,8 +14,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { THEME_TOGGLE } from '../store/actionType';
 import { userLogout } from '../store/userReducer';
+import { themeToggle } from '../store/optionReducer';
 
 export default function AvatarMenu({ username, initials }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -31,7 +31,7 @@ export default function AvatarMenu({ username, initials }) {
   };
 
   const toggleTheme = () => {
-    dispatch({ type: THEME_TOGGLE, payload: isDark ? 'light' : 'dark' });
+    dispatch(themeToggle(isDark ? 'light' : 'dark'));
     handleClose();
   };
 

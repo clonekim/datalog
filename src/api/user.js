@@ -12,12 +12,12 @@ export const googleLogin = async () => {
 
 export const signOut = () => {
   return auth.signOut();
-}
+};
 
 export const watchUser = () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, user => {
-      console.log('user state => ', user);
+      //      console.log('user state => ', user);
       if (user) {
         resolve({
           username: user.displayName,

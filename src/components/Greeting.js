@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
-function Bonjour({ show }) {
+function Greeting({ show }) {
   if (!show) return null;
 
   return (
@@ -18,10 +18,10 @@ function Bonjour({ show }) {
         border: '1px solid',
       }}>
       <Typography component='div' variant='body1'>
-        Bonjour? <br /> Il y a quelqu'un?
+        게시물이 존재 하지 않습니다.
       </Typography>
     </Box>
   );
 }
 
-export default Bonjour;
+export default Greeting;

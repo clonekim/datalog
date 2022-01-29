@@ -5,14 +5,14 @@ import TabPanel from './TabPane';
 import TagChipInputText from './TagChipInputText';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { EDITOR_TOGGLE, SOURCE_SELECTED } from '../store/actionType';
-import { addPost, updatePost } from '../store/postReducer';
+import { addPost, selectSource, updatePost } from '../store/postReducer';
+import { editorToggle } from '../store/optionReducer';
 import { fetchById } from '../api/post';
 import md from '../api/markdown';
 import 'github-markdown-css';
 
 function EditorPane({ width }) {
-  const sourceId = useSelector(state => state.post.source);
+  const feedId = useSelector(state => state.post.id);
   const dispatch = useDispatch();
   const [isEdit, setEdit] = useState(false);
   const [hasError, setError] = useState(false);
@@ -22,19 +22,19 @@ function EditorPane({ width }) {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    if (sourceId) {
-      fetchById(sourceId).then(data => {
+    if (feedId) {
+      fetchById(feedId).then(data => {
         setTags(data.tags);
         setText(data.body);
         setError(false);
         setEdit(true);
       });
     }
-  }, [sourceId]);
+  }, [feedId]);
 
   const closeEditor = () => {
-    dispatch({ type: SOURCE_SELECTED, payload: null });
-    dispatch({ type: EDITOR_TOGGLE, payload: false });
+    dispatch(selectSource(null));
+    dispatch(editorToggle(false));
     setTags([]);
     setText('');
     setPreview(null);
@@ -62,7 +62,7 @@ function EditorPane({ width }) {
       tags: tags,
     };
 
-    if (isEdit) dispatch(updatePost(Object.assign(payload, { id: sourceId })));
+    if (isEdit) dispatch(updatePost(Object.assign(payload, { id: feedId })));
     else dispatch(addPost(payload));
     closeEditor();
   };

@@ -10,8 +10,47 @@ import {
 
 const initialState = {
   list: [],
-  source: null,
+  id: null,
 };
+
+export default function postReduder(state = initialState, action) {
+  switch (action.type) {
+    case POST_FETCHED:
+      return {
+        ...state,
+        list: action.payload,
+      };
+
+    case POST_ADDED:
+      return {
+        ...state,
+        list: [action.payload, ...state.list],
+      };
+
+    case POST_UPDATED:
+      return {
+        ...state,
+        list: state.list.map(post => {
+          return post.id === action.payload.id ? action.payload : post;
+        }),
+      };
+
+    case POST_DELETED:
+      return {
+        ...state,
+        list: state.list.filter(i => action.payload !== i.id),
+      };
+
+    case SOURCE_SELECTED:
+      return {
+        ...state,
+        id: action.payload,
+      };
+
+    default:
+      return state;
+  }
+}
 
 export function addPost(payload) {
   return async dispatch => {
@@ -57,41 +96,6 @@ export function fetchPosts() {
   };
 }
 
-export default function postReduder(state = initialState, action) {
-  switch (action.type) {
-    case POST_FETCHED:
-      return {
-        ...state,
-        list: action.payload,
-      };
-
-    case POST_ADDED:
-      return {
-        ...state,
-        list: [action.payload, ...state.list],
-      };
-
-    case POST_UPDATED:
-      return {
-        ...state,
-        list: state.list.map(post => {
-          return post.id === action.payload.id ? action.payload : post;
-        }),
-      };
-
-    case POST_DELETED:
-      return {
-        ...state,
-        list: state.list.filter(i => action.payload !== i.id),
-      };
-
-    case SOURCE_SELECTED:
-      return {
-        ...state,
-        source: action.payload,
-      };
-
-    default:
-      return state;
-  }
+export function selectSource(payload) {
+  return dispatch => dispatch({ type: SOURCE_SELECTED, payload });
 }
