@@ -9,7 +9,7 @@ import {
 
 import GoogleIcon from '@mui/icons-material/Google';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import FacebookOutlined from '@mui/icons-material/FacebookOutlined';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import { googleLogin } from './api/user';
 import { useEffect, useState } from 'react';
 
@@ -24,7 +24,7 @@ export default function Login() {
   }, []);
 
   return (
-    <Container maxWidth='xs'>
+    <Container maxWidth="xs">
       <Box
         sx={{
           marginTop: 8,
@@ -32,33 +32,33 @@ export default function Login() {
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-        {show && <LinearProgress color='primary' sx={{ width: '100%' }} />}
+        {show && <LinearProgress color="primary" sx={{ width: '100%' }} />}
 
         {!show && (
           <>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component='h1' variant='h5'>
+            <Typography component="h1" variant="h5">
               Sign in
             </Typography>
 
             <Box sx={{ mt: 3, width: '60%' }}>
               <Button
-                variant='outlined'
+                variant="outlined"
                 fullWidth
-                size='large'
-                endIcon={<GoogleIcon />}
+                size="large"
+                startIcon={<GoogleIcon />}
                 onClick={googleLogin}>
                 Google
               </Button>
             </Box>
             <Box sx={{ mt: 1, width: '60%' }}>
               <Button
-                variant='outlined'
-                size='large'
+                variant="outlined"
+                size="large"
                 fullWidth
-                endIcon={<FacebookOutlined />}>
+                startIcon={<FacebookIcon />}>
                 Facebook
               </Button>
             </Box>
