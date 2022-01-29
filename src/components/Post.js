@@ -9,14 +9,12 @@ import {
   MenuItem,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import 'github-markdown-css';
-
 import TagList from './TagList';
-import { EDITOR_TOGGLE, SOURCE_SELECTED } from '../store/actionType';
-import { deletePost } from '../store/postReducer';
+import { deletePost, selectSource } from '../store/postReducer';
 import { toFormat } from '../date-util';
+import { editorToggle } from '../store/optionReducer';
 
 const CardHeader = ({
   author,
@@ -65,8 +63,8 @@ function Post({ id, isDraft, tags, updatedAt, body, author }) {
   };
 
   const handleEdit = () => {
-    dispatch({ type: SOURCE_SELECTED, payload: id });
-    dispatch({ type: EDITOR_TOGGLE, payload: true });
+    dispatch(selectSource(id));
+    dispatch(editorToggle(true));
     handleClose();
   };
 
@@ -74,6 +72,8 @@ function Post({ id, isDraft, tags, updatedAt, body, author }) {
     dispatch(deletePost(id));
     handleClose();
   };
+
+  useEffect(() => {}, []);
 
   return (
     <Box sx={{ mt: 2 }}>
@@ -91,7 +91,6 @@ function Post({ id, isDraft, tags, updatedAt, body, author }) {
             handleDelete={handleDelete}
           />
           <Box
-            className='markdown-body'
             sx={{ mb: 1.5, fontSize: 14 }}
             dangerouslySetInnerHTML={{ __html: body }}
           />
