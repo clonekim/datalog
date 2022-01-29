@@ -16,14 +16,16 @@ import Navigation from './components/Navigation';
 import PostList from './components/PostList';
 import Editor from './components/Editor';
 import SidePanel from './components/SidePanel';
-import Greeting from './components/Greeting';
+import NotFound from './components/NotFound';
 import { editorToggle } from './store/optionReducer';
 
 const ShowEditor = ({ mobile }) => {
   if (mobile)
     return (
       <Dialog fullScreen={true} open={true}>
-        <Editor width='auto' />
+        <Box sx={{ px: 0.4 }}>
+          <Editor width='auto' />
+        </Box>
       </Dialog>
     );
 
@@ -52,7 +54,7 @@ export default function Home() {
     <>
       <Navigation />
       <Container sx={{ mt: 3 }} maxWidth='md'>
-        <Greeting show={posts.length === 0} />
+        <NotFound show={posts.length === 0} />
 
         <Grid container spacing={1}>
           <Grid item md={8} sm={12} xs={12}>
@@ -77,7 +79,7 @@ export default function Home() {
 
         {showEditor && <ShowEditor mobile={mobile} />}
       </Container>
-      <Box sx={{ p: 2 }}></Box>
+      <Box sx={{ p: 3 }}></Box>
     </>
   );
 }

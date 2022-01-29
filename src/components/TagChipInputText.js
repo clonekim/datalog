@@ -26,6 +26,7 @@ function TagChipInputText({ tags, setTags }) {
       fullWidth
       onKeyDown={onKeyDown}
       focused={false}
+      placeholder="입력후 Enter를 치세요"
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
