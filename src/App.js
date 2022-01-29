@@ -9,6 +9,7 @@ function App() {
     () =>
       createTheme({
         palette: {
+          borderRadius: 0,
           background: {
             default: mode === 'dark' ? '#121212' : '#e4e6eb',
           },
@@ -16,16 +17,38 @@ function App() {
           mode,
         },
         components: {
+          MuiOutlinedInput: {
+            styleOverrides: {
+              root: {
+                borderRadius: 0,
+              },
+            },
+          },
+          MuiCard: {
+            styleOverrides: {
+              root: {
+                borderRadius: 0,
+              },
+            },
+          },
+          MuiPaper: {
+            styleOverrides: {
+              root: {
+                borderRadius: 0,
+              },
+            },
+          },
           MuiTab: {
             styleOverrides: {
               root: {
-                textTransform: 'none'
-              }
-            }
+                textTransform: 'none',
+              },
+            },
           },
           MuiButton: {
             styleOverrides: {
               root: {
+                borderRadius: 0,
                 textTransform: 'none',
               },
             },
