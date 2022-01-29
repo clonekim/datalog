@@ -1,33 +1,49 @@
-import { httpsCallable } from '@firebase/functions';
 import {
   addDoc,
   collection,
   doc,
   getDoc,
+  getDocs,
   Timestamp,
   setDoc,
   updateDoc,
   deleteDoc,
   increment,
   onSnapshot,
+  query,
+  limit,
 } from 'firebase/firestore';
 import auth from './firebase.auth';
 import db from './firebase.firestore';
-import functions from './firebase.function';
 import md from './markdown';
 import difference from 'lodash/difference';
 
-const fetchPosts = httpsCallable(functions, 'handler/fetchPosts');
-
 export const fetch = async () => {
-  try {
-    const { data = [] } = await fetchPosts();
+  const q = query(collection(db, 'posts'), limit(20));
+  const snapshots = await getDocs(q);
+  const payload = [];
 
-    return data;
-  } catch (err) {
-    console.log('Error =>', err);
-    return [];
-  }
+  snapshots.forEach(snap => {
+    payload.push(
+      new Promise(async (resolve, reject) => {
+        const _doc = snap.data();
+        const authorRef = doc(db, snap.get('author.ref'));
+        const author = await getDoc(authorRef);
+        const data = {
+          ..._doc,
+          id: snap.id,
+          author: author.get('displayName'),
+          body: md.render(_doc.body),
+          createdAt: _doc.createdAt.toDate(),
+          updatedAt: _doc.createdAt.toDate(),
+        };
+
+        resolve(data);
+      }),
+    );
+  });
+
+  return await Promise.all(payload);
 };
 
 export const create = async payload => {
@@ -46,8 +62,6 @@ export const create = async payload => {
     const ref = doc(db, `tags/${tag}`);
     setDoc(ref, { count: increment(1) });
   });
-
-  console.log(writeResult, data);
 
   return {
     ...data,
