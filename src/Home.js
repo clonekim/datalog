@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <>
       <Navigation />
-      <Container sx={{ mt: 3 }} maxWidth='md'>
+      <Container sx={{ mt: 3 }} maxWidth='lg'>
         <NotFound show={posts.length === 0} />
 
         <Grid container spacing={1}>

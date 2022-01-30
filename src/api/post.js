@@ -10,6 +10,7 @@ import {
   deleteDoc,
   query,
   limit,
+  orderBy,
 } from 'firebase/firestore';
 import auth from './firebase.auth';
 import db from './firebase.firestore';
@@ -27,7 +28,12 @@ import { v4 as uuid } from 'uuid';
 import { keyBy } from 'lodash';
 
 export const fetch = async () => {
-  const q = query(collection(db, 'posts'), limit(20));
+  const q = query(
+    collection(db, 'posts'),
+    orderBy('updatedAt', 'desc'),
+    limit(20),
+  );
+
   const snapshots = await getDocs(q);
   const payload = [];
 

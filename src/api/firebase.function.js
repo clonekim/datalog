@@ -3,7 +3,7 @@ import app from './firebase.config';
 
 const functions = getFunctions(app);
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.REACT_APP_NODE_ENV === 'development') {
   connectFunctionsEmulator(functions, 'localhost', 5001);
 }
 
