@@ -1,53 +1,10 @@
-import {
-  Card,
-  CardContent,
-  Box,
-  CardActions,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useEffect, useState } from 'react';
+import { Card, CardContent, Box, CardActions } from '@mui/material';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import TagList from './TagList';
 import { deletePost, selectSource } from '../store/postReducer';
-import { toFormat } from '../date-util';
 import { editorToggle } from '../store/optionReducer';
-
-const CardHeader = ({
-  author,
-  time,
-  isDraft,
-  anchorEl,
-  open,
-  handleClick,
-  handleClose,
-  handleEdit,
-  handleDelete,
-}) => {
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <Typography variant='caption' color='text.secondary' sx={{ flexGrow: 1 }}>
-        {author}가 작성하였음 {toFormat(time)}
-      </Typography>
-
-      <IconButton onClick={handleClick}>
-        <MoreVertIcon />
-      </IconButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem dense onClick={handleEdit}>
-          편집
-        </MenuItem>
-        <MenuItem dense onClick={handleDelete}>
-          삭제
-        </MenuItem>
-        <MenuItem dense>{isDraft ? '출판하기' : '임시상태로'}</MenuItem>
-      </Menu>
-    </Box>
-  );
-};
+import TagList from './TagList';
+import PostMenu from './PostMenu';
 
 function Post({ id, isDraft, tags, updatedAt, body, author }) {
   const dispatch = useDispatch();
@@ -73,13 +30,11 @@ function Post({ id, isDraft, tags, updatedAt, body, author }) {
     handleClose();
   };
 
-  useEffect(() => {}, []);
-
   return (
     <Box sx={{ mt: 2 }}>
       <Card variant='outlined'>
         <CardContent>
-          <CardHeader
+          <PostMenu
             author={author}
             time={updatedAt}
             isDraft={isDraft}

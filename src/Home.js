@@ -20,7 +20,7 @@ import NotFound from './components/NotFound';
 import { editorToggle } from './store/optionReducer';
 
 const ShowEditor = ({ mobile }) => {
-  if (mobile)
+  if (mobile) {
     return (
       <Dialog fullScreen={true} open={true}>
         <Box sx={{ px: 0.4 }}>
@@ -28,15 +28,15 @@ const ShowEditor = ({ mobile }) => {
         </Box>
       </Dialog>
     );
+  }
 
-  if (!mobile)
-    return (
-      <Card sx={{ position: 'fixed', bottom: 3, right: 2 }}>
-        <CardContent>
-          <Editor width={550} />
-        </CardContent>
-      </Card>
-    );
+  return (
+    <Card sx={{ position: 'fixed', bottom: 3, right: 2 }}>
+      <CardContent>
+        <Editor width={550} />
+      </CardContent>
+    </Card>
+  );
 };
 
 export default function Home() {

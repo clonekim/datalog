@@ -21,7 +21,6 @@ export default function PostList() {
 
   useEffect(() => {
     dispatch(fetchTags());
-
     console.log('highlight...');
     hljs.highlightAll();
   }, [posts]);

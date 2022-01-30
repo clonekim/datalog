@@ -8,15 +8,23 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  increment,
-  onSnapshot,
   query,
   limit,
 } from 'firebase/firestore';
 import auth from './firebase.auth';
 import db from './firebase.firestore';
+import storage from './firebase.storage';
 import md from './markdown';
 import difference from 'lodash/difference';
+import {
+  deleteObject,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
+import { v4 as uuid } from 'uuid';
+import { keyBy } from 'lodash';
 
 export const fetch = async () => {
   const q = query(collection(db, 'posts'), limit(20));
@@ -47,20 +55,41 @@ export const fetch = async () => {
 };
 
 export const create = async payload => {
-  const data = Object.assign(payload, {
+  const data = Object.assign({}, payload, {
     author: {
       ref: `users/${auth.currentUser.uid}`,
     },
     isDraft: true,
     createdAt: Timestamp.fromDate(new Date()),
     updatedAt: Timestamp.fromDate(new Date()),
+    attachments: payload.attachments.map(f => ({
+      name: f.name,
+      size: f.size,
+      path: uuid(),
+    })),
   });
 
   const writeResult = await addDoc(collection(db, 'posts'), data);
 
+  const fileKeyBy = keyBy(data.attachments, i => i.name);
+
+  payload.attachments.map(async file => {
+    const path = fileKeyBy[file.name].path;
+    const storageRef = ref(storage, `${writeResult.id}/${path}`);
+    const metadata = {
+      customMetadata: {
+        localFileName: file.name,
+      },
+    };
+
+    await uploadBytes(storageRef, file, metadata);
+  });
+
   payload.tags.map(async tag => {
     const ref = doc(db, `tags/${tag}`);
-    setDoc(ref, { count: increment(1) });
+    const snap = await getDoc(ref);
+    const count = snap.exists() ? snap.get('count') + 1 : 1;
+    setDoc(ref, { count });
   });
 
   return {
@@ -77,8 +106,10 @@ export const fetchById = async id => {
   const docSnap = await getDoc(doc(db, 'posts', id));
 
   if (docSnap.exists()) {
+    const _doc = docSnap.data();
+
     return {
-      ...docSnap.data(),
+      ..._doc,
       id: docSnap.id,
     };
   } else {
@@ -98,7 +129,9 @@ export const update = async payload => {
 
   added.map(async tag => {
     const ref = doc(db, `tags/${tag}`);
-    setDoc(ref, { count: increment(1) });
+    const snap = await getDoc(ref);
+    const count = snap.exists() ? snap.get('count') + 1 : 1;
+    setDoc(ref, { count });
   });
 
   removed.map(async tag => {
@@ -141,9 +174,21 @@ export const remove = async id => {
   });
 
   await deleteDoc(docRef);
+
+  const listRef = ref(storage, `${id}`);
+
+  const { items } = await listAll(listRef);
+
+  if (items) {
+    await Promise.all(
+      items.map(async i => await deleteObject(ref(storage, i.fullPath))),
+    );
+  }
+
   return true;
 };
 
-const unsub = onSnapshot(doc(db, 'posts', '*'), doc => {
-  console.log('Watch Posts =>>>', doc);
-});
+export const generateURL = async path => {
+  const storageRef = ref(storage, path);
+  return await getDownloadURL(storageRef);
+};

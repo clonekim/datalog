@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
 import { Paper } from '@mui/material';
+import { useSelector } from 'react-redux';
 import TagList from './TagList';
 
 function SidePanel() {

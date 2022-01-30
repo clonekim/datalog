@@ -7,7 +7,7 @@ import AvatarMenu from './AvatarMenu';
 
 function Navigation() {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('md'));
+  //const matches = useMediaQuery(theme.breakpoints.down('md'));
   const user = useSelector(state => state.user);
 
   return (

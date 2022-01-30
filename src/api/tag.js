@@ -1,14 +1,6 @@
 import db from './firebase.firestore';
 
-import {
-  addDoc,
-  collection,
-  getDocs,
-  doc,
-  query,
-  where,
-  onSnapshot,
-} from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
 export const fetch = async () => {
   const q = query(collection(db, 'tags'), where('count', '>', 0));
@@ -23,7 +15,3 @@ export const fetch = async () => {
 export const create = async payload => {
   return await addDoc(collection(db, 'tags'), payload);
 };
-
-const unsub = onSnapshot(doc(db, 'tags', '*'), doc => {
-  console.log('Realtime =>>>', typeof doc);
-});
